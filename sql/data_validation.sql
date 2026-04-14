@@ -6,4 +6,3 @@ ROUND(COUNT(*)*100.0/SUM(COUNT(*)) OVER(),2) AS percentage
 FROM hr_employee
 GROUP BY Attrition 
 ORDER BY total DESC;
-

@@ -35,4 +35,3 @@ CREATE TABLE hr_employee (
     YearsSinceLastPromotion    INT,
     YearsWithCurrManager       INT
 );
-
