@@ -30,6 +30,7 @@ using PostgreSQL for data analysis and Power BI for visualization.
 ---
 
 ## 📁 Project Structure
+
 hr-analytics/
 ├── data/ # Raw dataset (not pushed — download from Kaggle)
 ├── sql/
