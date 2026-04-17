@@ -57,3 +57,34 @@ SQL LEARNINGS:
 - For salary analysis always use RANK() → equal pay = equal rank
 - Cannot use window function alias in WHERE clause directly
 - Solution: wrap in CTE first, then filter → standard industry pattern
+
+Date: 17 April 2026
+Day 14 — Tenure Bands + Promotion Gap (NTILE, RANK, Chained CTEs)
+
+TENURE QUARTILE FINDINGS:
+- New Joiners (0-3 yrs): 29.08% attrition — nearly 1 in 3 leaves early
+- Early Career (3-5 yrs): drops sharply to 14.13% — survival filter kicks in
+- Mid Tenure (5-9 yrs): 10.90% — mostly stable, committed employees
+- Veterans (9-40 yrs): 10.35% — lowest attrition, company loyalists
+- Pattern: attrition HALVES from New Joiners → Early Career (29% → 14%)
+  This means onboarding and first 3 years is the critical retention window
+- If company fixes Year 0-3 experience → attrition drops most dramatically
+
+PROMOTION GAP FINDINGS:
+- Multiple R&D employees: 4 years since last promotion
+- Research Scientist, 5 yrs at company, 4 yrs since promotion → stuck
+- Manufacturing Directors, Lab Technicians all showing 4yr promotion gap
+- Promotion Overdue employees in R&D are worth flagging to HR managers
+
+KEY BUSINESS INSIGHT:
+- 107 employees left within their first 3 years (New Joiners bucket)
+- That's 45% of ALL attrition (107 out of 237 total exits) happening
+  in just the first 3 years → early exit is the #1 attrition problem
+- Fix: better onboarding, faster first promotion, clear career paths
+
+SQL LEARNINGS:
+- NTILE(4) splits 1470 rows into 4 equal ~367-368 row buckets
+- Two CTEs chained: first CTE creates tenure_quartile column,
+  second CTE groups and aggregates on it
+- Can't GROUP BY a window function result directly → CTE wrapper needed
+- Chained CTEs = WITH cte1 AS (...), cte2 AS (SELECT FROM cte1) SELECT FROM cte2
