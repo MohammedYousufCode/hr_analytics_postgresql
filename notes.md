@@ -88,3 +88,172 @@ SQL LEARNINGS:
   second CTE groups and aggregates on it
 - Can't GROUP BY a window function result directly → CTE wrapper needed
 - Chained CTEs = WITH cte1 AS (...), cte2 AS (SELECT FROM cte1) SELECT FROM cte2
+
+Date: 18 April 2026
+Day 15 — Overtime + Work-Life Balance (Chained CTEs)
+
+WHAT TO LOOK FOR IN OUTPUT:
+
+Query 1:
+- Compare attrition_rate_pct where OverTime='Yes' vs OverTime='No'
+- Expected: OverTime=Yes will be roughly 2x the attrition of OverTime=No
+- Which department has highest overtime attrition? Likely Sales
+- Check avg_salary for overtime vs non-overtime — are overtime workers
+  paid more or less? If less paid AND doing overtime → double problem
+
+Query 2:
+- WorkLifeBalance=1 (Bad) + OverTime=Yes → expected highest attrition
+- Does attrition_pct DROP as WLB rating improves (1→2→3→4)?
+- If yes: it proves WLB rating moderates overtime impact
+- avg_tenure column: do low WLB employees leave faster (lower avg_tenure)?
+
+SQL LEARNINGS:
+- CTE chain: each CTE is a named temp result — no data stored on disk
+- Step 1 filters, Step 2 aggregates, Step 3 labels — clean separation
+- WHERE clause in CTE (Step 1) is more readable than nested subquery filter
+- CASE WorkLifeBalance WHEN 1 THEN... = shorthand for repeated CASE WHEN
+- All CTEs execute top to bottom — later CTEs can reference earlier ones
+- Final SELECT just picks from the last CTE — keeps main query clean
+
+OVERTIME FINDINGS:
+- ALL 3 departments are flagged CRITICAL when OverTime = Yes
+- Sales overtime attrition: 37.50% vs 13.84% without overtime
+  → Overtime MULTIPLIES attrition by 2.7x in Sales specifically
+- R&D: 27.31% with OT vs 8.55% without → 3.2x multiplier — worst ratio
+- Every single department: overtime workers leave at 2x-3x the rate
+  of non-overtime workers → overtime is the single biggest attrition lever
+- Avg salary for overtime vs non-overtime is almost IDENTICAL
+  → employees are not being paid more for overtime → double exploitation
+
+WORK-LIFE BALANCE FINDINGS:
+- WLB=1 (Bad) + Overtime = 45.45% attrition → nearly 1 in 2 leaves
+- WLB=4 (Best) attrition is 33.33% — surprisingly high
+  → Even "Best" WLB rating doesn't protect overtime workers enough
+  → Once overtime starts, WLB rating barely matters
+- WLB=1 avg income: ₹4,644 vs WLB=3 avg: ₹6,630
+  → Lowest paid overtime workers ALSO have worst work-life balance
+  → Low pay + overtime + bad WLB = guaranteed attrition
+- avg_tenure is similar across all WLB bands (6.0–7.1 yrs)
+  → WLB doesn't affect HOW LONG before they leave, just WHETHER they leave
+
+KEY BUSINESS RECOMMENDATION (for README/interview):
+- Reducing overtime in Sales and R&D is the highest-impact
+  single action this company can take to reduce attrition
+- Eliminating overtime for bottom salary band employees is critical
+  (WLB=1 group earns ₹4,644 avg — lowest paid AND most exploited)
+
+Date: 21 April 2026
+Day 16 — High Risk Profiling + LAG()
+
+RISK SCORING FINDINGS:
+- 370 employees flagged High/Critical Risk = 25.2% of workforce
+- Top 4 Critical Risk (score=9) are ALL R&D, all earning < ₹2,400/month
+- Age 27-29: youngest employees scoring highest risk → early career crisis
+- EMP 741 & 1244: Research Scientists, OT=Yes, salary ~₹2,200, age 27-28
+  → young, underpaid, overworked, stuck in role → textbook flight risk
+- EMP 1805: HR role, score=8, no overtime yet still Critical Risk
+  → low salary + low satisfaction alone drives the score up
+- Scoring model validated: R&D and HR dominate Critical Risk list
+  → matches Day 12 findings where these depts had highest attrition
+
+LAG() FINDINGS:
+- Healthcare Representatives showing salary INVERSION pattern
+  → senior employees (more YearsAtCompany) earning LESS than juniors
+  → Row 2: EMP 1766 earns ₹5,811 but previous row (junior) earned ₹6,673
+  → This is salary compression — a known HR problem where new hires
+    get market rate but existing employees never catch up
+- 407 overtime employees analysed — LAG ran cleanly across all job roles
+- prev_employee_salary=0 rows correctly excluded by WHERE clause
+
+KEY BUSINESS INSIGHT:
+- Salary compression (seniors earning less than juniors) + overtime
+  = the exact combination that triggers experienced employee exits
+- Company is losing institutional knowledge, not just headcount
+- Risk score 9 employees should be the FIRST priority for HR intervention
+
+WHAT TO LOOK FOR IN OUTPUT:
+
+Query 1 (LAG):
+- Look for rows where salary_gap_from_prev is NEGATIVE
+  → An employee earns LESS than someone with fewer years in same role
+  → These are the most likely to leave — senior but underpaid vs junior
+- Check: do "Earning Less Than Junior" rows show Attrition = Yes more?
+- PercentSalaryHike column: if hike % is low AND salary_progression
+  is negative → this employee was ignored at appraisal time
+
+Query 2 (Risk Score):
+- How many employees are in Critical Risk (score >= 7)?
+- Cross-check: of Critical Risk employees, what % have Attrition = Yes?
+  → If your scoring model is good, most Attrition=Yes should be
+    in High/Critical Risk buckets → model validation
+- Which department has the most Critical Risk employees?
+- Lowest MonthlyIncome + OverTime + low JobSatisfaction = 
+  the exact profile that always appears in attrition research
+
+SQL LEARNINGS:
+- LAG(col, 1, 0): third argument = default when no previous row exists
+  → prevents NULL in first row of each partition
+- WHERE prev_employee_salary > 0 removes those first-row NULLs cleanly
+- Risk scoring with stacked CASE WHEN additions is a standard
+  technique in HR analytics, credit scoring, and fraud detection
+- RANK() inside second CTE ranks employees after scoring is done
+  → clean separation: score first, rank second
+
+  Date: 22 April 2026
+Day 17 — Performance Rating vs Attrition + Satisfaction Matrix
+
+WHAT TO LOOK FOR IN OUTPUT:
+
+Query 1:
+- Does PerformanceRating=4 still show meaningful attrition?
+  If yes → company is losing good performers too
+- Compare avg_job_satisfaction and avg_environment_satisfaction
+  by PerformanceRating
+- If high performers have decent ratings but still leave,
+  the issue may be overtime, promotion gap, or pay compression
+
+Query 2:
+- Which JobSatisfaction + EnvironmentSatisfaction combo has highest attrition?
+- Expected: low job satisfaction + low environment satisfaction = worst case
+- Focus only on combinations with at least 20 employees
+  → avoids fake high percentages on tiny groups
+- Check avg_income too:
+  if low-satisfaction groups also earn less,
+  then dissatisfaction may be tied to compensation
+
+SQL LEARNINGS:
+- FILTER is cleaner than repeating SUM(CASE WHEN ...)
+- COUNT(*) FILTER (WHERE Attrition='Yes') is the modern PostgreSQL style
+- You can calculate multiple conditional metrics in one grouped query
+- CTE 1 builds the matrix, CTE 2 labels the risk level
+
+PERFORMANCE FINDINGS — THE SHOCKING PART:
+- Dataset has ONLY PerformanceRating 3 and 4 — no 1s or 2s
+  → IBM rated everyone Excellent (3) or Outstanding (4)
+  → This is a known dataset limitation — likely a data collection bias
+- Rating 3 attrition: 16.08% | Rating 4 attrition: 16.37%
+  → Virtually IDENTICAL — performance rating has zero predictive value here
+- Outstanding performers (rating=4) leave at a HIGHER rate than Excellent (3)
+  → The best employees are leaving more than average — serious problem
+- Outstanding performers earn LESS on average (₹6,313 vs ₹6,537)
+  → Best performers being paid less → obvious reason they're leaving
+- avg_job_satisfaction is 2.73 for BOTH groups — mid-scale, not high
+  → Even high performers are only moderately satisfied
+
+SATISFACTION MATRIX FINDINGS:
+- Worst combination: JobSat=1 + EnvSat=1 → 37.74% attrition (Critical)
+- Second worst: JobSat=2 + EnvSat=1 → 34.04% — EnvSat=1 is the killer
+  → Low environment satisfaction is more damaging than low job satisfaction
+- Row 5: JobSat=1 + EnvSat=4 → only 18.39%
+  → Good environment compensates somewhat for low job satisfaction
+- Avg income for Critical group (₹6,158–₹7,358) is not low
+  → These employees earn decent money but STILL leave
+  → Confirms: money alone doesn't retain employees with bad environment
+
+KEY INTERVIEW-READY INSIGHT:
+- Performance rating is a POOR predictor of attrition in this dataset
+- Environment satisfaction (physical/cultural workplace) predicts attrition
+  better than job satisfaction alone
+- Best retention investment: fix the work environment first,
+  then address job role satisfaction
+
