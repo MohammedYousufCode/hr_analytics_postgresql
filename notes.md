@@ -257,3 +257,60 @@ KEY INTERVIEW-READY INSIGHT:
 - Best retention investment: fix the work environment first,
   then address job role satisfaction
 
+Date: 23 April 2026
+Day 18 — Executive Summary Query (Full Pipeline)
+
+SALARY FAIRNESS PATTERN — THE MOST IMPORTANT FINDING:
+- Rows 1,2,3,5,8: salary_fairness = 'Leavers Underpaid'
+  → These are ALL low-to-mid salary roles (₹2,600–₹4,235)
+  → Leavers earned LESS than their peers who stayed
+  → Pay inequity at entry-mid level is directly causing exits
+- Rows 4,6,7,9,10: salary_fairness = 'Leavers Overpaid'
+  → These are senior/high-pay roles (₹7,000–₹19,000)
+  → Leavers actually earned MORE than stayers
+  → These people left despite being well-paid → NOT a money problem
+  → For senior roles: career growth, autonomy, or culture is the issue
+
+THE TWO-TIER ATTRITION PROBLEM:
+- Tier 1 (Junior roles): leaving because underpaid vs peers
+  → Fix: pay equity audit, salary band enforcement
+- Tier 2 (Senior roles): leaving despite being overpaid
+  → Fix: career development, promotion paths, role enrichment
+
+ATTRITION CONCENTRATION:
+- Top 3 roles (Sales Rep, Lab Tech, HR) account for:
+  33+62+12 = 107 exits out of 237 total = 45% of ALL company attrition
+  → Fix just these 3 roles → almost halve company attrition
+- Research Director: only 2.50% attrition → benchmark for stability
+
+OVERTIME OBSERVATION:
+- Overtime% is 23-33% across ALL roles regardless of attrition rate
+  → Overtime is company-wide, not role-specific
+  → But combined with low salary → triggers attrition in junior roles
+
+QUERY ARCHITECTURE NOTE:
+- 4-step CTE pipeline: metrics → satisfaction → join → rank+classify
+- JOIN between two CTEs on Department+JobRole is valid PostgreSQL
+- attrition_rate_pct column still showing full decimals → note for self:
+  use ROUND(..., 2) wrapped around the full expression next time
+
+
+WHAT TO LOOK FOR:
+- Which job role has rank=1 (highest attrition) in each department?
+- salary_fairness = 'Leavers Underpaid' → confirms pay is driving exits
+- salary_fairness = 'Leavers Overpaid' → attrition is NOT about money
+  → look at their WLB/satisfaction scores instead
+- risk_classification: count how many roles are Critical vs Stable
+- avg_yrs_since_promotion: roles with 3+ years AND high attrition
+  → promotion stagnation is the root cause there
+- Compare avg_tenure of high-risk vs stable roles
+  → if high-risk roles have shorter avg_tenure → early exit confirmed
+
+QUERY ARCHITECTURE:
+- CTE 1 (base_metrics): all attrition and salary numbers
+- CTE 2 (satisfaction_metrics): all satisfaction and OT numbers
+- CTE 3 (combined): JOIN the two CTEs on Dept + JobRole
+- CTE 4 (ranked): add RANK() window function + CASE labels
+- Final SELECT: filter and present cleanly
+- This is a 4-step CTE pipeline — the most complex query in the project
+- JOIN between two CTEs is valid PostgreSQL — treat them like tables
