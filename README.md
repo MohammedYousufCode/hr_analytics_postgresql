@@ -1,126 +1,154 @@
 # HR Analytics — Employee Attrition Analysis
 
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-blue?logo=postgresql)
-![PowerBI](https://img.shields.io/badge/Power%20BI-Dashboard-yellow?logo=powerbi)
-![Status](https://img.shields.io/badge/Status-In%20Progress-orange)
+> An end-to-end data analytics project uncovering why employees leave, who is most at risk, and what HR can do about it.
+
+---
 
 ## 📌 Project Overview
 
-End-to-end HR Analytics project analyzing employee attrition patterns  
-using PostgreSQL for data analysis and Power BI for visualization.
+This project analyzes employee attrition patterns using the **IBM HR Analytics dataset** — 1,470 employees across 35 attributes. The goal is to give HR leadership a clear, data-backed picture of attrition drivers so they can act before the problem worsens.
 
-- **Dataset:** IBM HR Analytics Employee Attrition & Performance  
-- **Source:** [Kaggle — IBM HR Analytics Dataset](https://www.kaggle.com/datasets/pavansubhasht/ibm-hr-analytics-attrition-dataset)  
-- **Size:** 1,470 employees | 35 attributes  
-- **Goal:** Identify key drivers of employee attrition to help HR managers
-  make data-driven retention decisions.
+**Business Problem:** The company is experiencing a **16.12% attrition rate**. HR leadership needs to understand *who* is leaving, *why*, and *which departments* are most at risk.
 
----
-
-## 🛠️ Tools & Technologies
+**Tools Used:**
 
 | Tool | Purpose |
-|------|---------|
-| PostgreSQL 18 | Data storage, SQL analysis |
-| pgAdmin | Database management & query execution |
-| Power BI Desktop | Interactive dashboard |
-| VS Code | SQL file editing |
-| GitHub | Version control & portfolio hosting |
+|---|---|
+| 🐘 PostgreSQL | Data modeling + 7 advanced SQL queries |
+| 📊 Power BI Desktop | Interactive 5-visual dashboard (live PostgreSQL connection) |
+| 🐍 Python (Pandas, Seaborn) | Supporting EDA |
+| 🐙 GitHub | Version control |
 
 ---
 
-## 📁 Project Structure
+## 📊 Dashboard
 
+Built with Power BI, connected live to PostgreSQL. Use the **department slicer** to filter all visuals simultaneously.
+
+| Overview | Filtered: R&D | Salary Comparison |
+|---|---|---|
+| ![Overview](dashboard/screenshots/dashboard_overview.jpg) | ![R&D](dashboard/screenshots/dashboard_filtered_RD.jpg) | ![Salary](dashboard/screenshots/salary_comparison.jpg) |
+
+---
+
+## 🔍 Key Findings
+
+| # | Finding | Insight |
+|---|---|---|
+| 1 | **Overall attrition: 16.12%** | 237 out of 1,470 employees left |
+| 2 | **Sales Representatives: 39.76% attrition** | Highest-risk role in the company |
+| 3 | **R&D loses the most people (133)** | Despite a lower attrition %, sheer volume is alarming |
+| 4 | **Junior leavers are underpaid vs. peers** | Sales Rep, Lab Tech, HR — all show pay inequity |
+| 5 | **Senior leavers earn MORE than stayers** | Money isn't the issue at senior level — culture and growth are |
+| 6 | **Low JobSat + Low EnvSat = 37.74% attrition** | Worst-performing combination in the satisfaction matrix |
+| 7 | **44% of R&D leavers worked overtime** | Overwork + low pay = attrition in junior R&D roles |
+| 8 | **Research Directors: only 2.5% attrition** | Benchmark role for retention best practices |
+
+---
+
+## 🗂️ Project Structure
+
+```
 hr-analytics/
-├── data/ # Raw dataset (not pushed — download from Kaggle)
 ├── sql/
-│ ├── 00_create_table.sql # Table schema
-│ ├── 00_data_validation.sql # Data quality checks
-│ ├── 01_attrition_by_dept.sql # Day 12
-│ ├── 02_salary_analysis.sql # Day 13
-│ ├── 03_window_functions.sql # Day 14
-│ ├── 04_cte_analysis.sql # Day 15
-│ ├── 05_tenure_analysis.sql # Day 16
-│ ├── 06_overtime_analysis.sql # Day 17
-│ ├── 07_performance_analysis.sql # Day 18
-│ └── 08_final_summary.sql # Day 19
+│   ├── 00_create_table.sql         # Schema creation
+│   ├── 00_data_validation.sql      # Data quality checks
+│   ├── 01_attrition_by_dept.sql    # Dept-level attrition
+│   ├── 02_salary_band_analysis.sql # Income vs attrition
+│   ├── 03_window_functions.sql     # RANK, LAG, NTILE
+│   ├── 04_cte_pipeline.sql         # Multi-step CTE analysis
+│   ├── 05_tenure_analysis.sql      # LAG + YoY patterns
+│   ├── 06_satisfaction_matrix.sql  # FILTER aggregates
+│   └── 07_executive_summary.sql    # Final 4-step CTE report
 ├── dashboard/
-│ ├── hr_analytics_dashboard.pbix # Power BI file
-│ └── screenshots/ # Dashboard images
+│   ├── hr_analytics_dashboard.pbix
+│   └── screenshots/
+│       ├── dashboard_overview.jpg
+│       ├── dashboard_filtered_RD.jpg
+│       └── salary_comparison.jpg
+├── data/                            # Source dataset
+├── .gitignore
 └── README.md
+```
 
 ---
 
-## ❓ Business Questions Answered
+## 🧠 SQL Concepts Demonstrated
 
-1. What is the overall attrition rate?
-2. Which departments and job roles have the highest attrition?
-3. Does overtime directly correlate with attrition?
-4. What salary bands see the most employee exits?
-5. How does tenure and years since promotion affect attrition risk?
-6. Do high performers leave more than average performers?
-7. Which age groups are most at risk of leaving?
-8. How does work-life balance rating relate to attrition?
-
----
-
-## 📊 Key Findings
-
-### Baseline Attrition Rate
-- Overall attrition: **16.12%** (237 out of 1,470 employees left)
-- Retention rate: **83.88%** (1,233 employees stayed)
-- Industry benchmark for healthy attrition is ~10–15%.
-  This company is slightly **above benchmark** — worth investigating why.
-- For every 6 employees, roughly 1 has left the company.
-  At scale (10,000 employees), that's ~1,600 exits — significant hiring cost.
-
-> More findings will be added as queries are completed (Days 12–19).
+| Concept | Query File | Business Question Answered |
+|---|---|---|
+| `GROUP BY` + `HAVING` | `01_attrition_by_dept.sql` | Which departments have >15% attrition? |
+| `CASE WHEN` + salary bands | `02_salary_band_analysis.sql` | Do lower-paid employees leave more? |
+| `RANK() OVER` + `AVG() OVER` | `03_window_functions.sql` | How does each role rank within its department? |
+| `NTILE()` + CTE | `04_cte_pipeline.sql` | Which salary quartile has the most exits? |
+| `LAG() OVER` | `05_tenure_analysis.sql` | At what tenure stage does attrition peak? |
+| `FILTER` aggregates | `06_satisfaction_matrix.sql` | Which satisfaction combination is most critical? |
+| 4-step CTE pipeline | `07_executive_summary.sql` | Full executive attrition report |
 
 ---
 
-## 🗂️ SQL Concepts Covered
-| Concept | Business Question |
-|---------|-------------------|
-| Schema design, CSV import | Dataset setup & validation |
-| GROUP BY, HAVING, CASE WHEN | Attrition by department & job role |
-| Window Functions (ROW_NUMBER, RANK) | Salary ranking within departments |
-| Window Functions (LAG, LEAD) | Tenure & promotion gap analysis |
-| CTEs | Multi-step attrition breakdown |
-| Subqueries + CTEs | High-risk employee profiling |
-| Aggregations + FILTER | Overtime vs attrition deep dive |
-| CASE WHEN + GROUP BY | Performance vs attrition matrix |
-| Combined — Final summary query | Executive-level attrition report |
+## 📈 DAX Measures (Power BI)
+
+```dax
+Total Employees    = COUNT('public hr_employee'[employeenumber])
+Attrition Count    = COUNTROWS(FILTER('public hr_employee', [attrition] = "Yes"))
+Attrition Rate     = DIVIDE([Attrition Count], [Total Employees]) * 100
+Avg Income Leavers = CALCULATE(AVERAGE([monthlyincome]), [attrition] = "Yes")
+Avg Income Stayers = CALCULATE(AVERAGE([monthlyincome]), [attrition] = "No")
+```
 
 ---
 
-## 📈 Power BI Dashboard
+## 💡 Recommendations for HR Leadership
 
-**Planned Visuals:**
-- Attrition rate KPI card
-- Attrition by Department (bar chart)
-- Attrition by Age Group (histogram)
-- Monthly Income vs Attrition (box plot)
-- Overtime vs Attrition (donut chart)
-- Attrition by Job Role (treemap)
+1. **Immediate — Pay Equity Audit:** Sales Representatives and Lab Technicians who leave are earning less than peers who stay. Closing this gap is the fastest lever.
+2. **Short-term — Overtime Policy in R&D:** 44% of R&D leavers were working overtime. Add overtime compensation or cap hours for junior R&D roles.
+3. **Long-term — Career Path Clarity:** Research Scientists and Lab Technicians are leaving due to stagnation. Structured growth tracks can reduce this.
+4. **Benchmark — Research Directors:** With only 2.5% attrition, this role is a model for retention. Study what's working there and replicate it across other senior roles.
 
 ---
 
-## 🚀 How to Reproduce
+## 🚀 How to Run This Project
 
-1. Download the dataset from [Kaggle](https://www.kaggle.com/datasets/pavansubhasht/ibm-hr-analytics-attrition-dataset)
-2. Create a PostgreSQL database called `hr_analytics`
-3. Run `sql/00_create_table.sql` to create the schema
-4. Import the CSV into the `hr_employee` table
-5. Run `sql/00_data_validation.sql` to verify the load
-6. Run queries in order from `01_` to `08_`
+### PostgreSQL Setup
+
+```sql
+CREATE DATABASE hr_analytics;
+```
+
+Then run the SQL files in order:
+
+```bash
+# 1. Create schema
+psql -d hr_analytics -f sql/00_create_table.sql
+
+# 2. Import CSV
+# Use pgAdmin or \copy to load: data/WA_Fn-UseC_-HR-Employee-Attrition.csv
+
+# 3. Validate data
+psql -d hr_analytics -f sql/00_data_validation.sql
+
+# 4. Run analysis queries (01 through 07)
+```
+
+### Power BI
+
+1. Open `dashboard/hr_analytics_dashboard.pbix`
+2. Go to **Transform Data → Data Source Settings**
+3. Update the PostgreSQL server and credentials to match your local setup
+4. Click **Refresh**
 
 ---
 
 ## 👤 Author
 
-**[Mohammed Yousuf]**  
-BCA Final Year | Aspiring Data Analyst  
-📍 Bengaluru, India  
-🔗 [LinkedIn](https://linkedin.com/in/mohammed-yousuf-aiml) | [GitHub](https://github.com/MohammedYousufCode)
+**[Your Name]**
+BCA Final Year | Aspiring Data Analyst
+📍 Bengaluru / Hyderabad
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](your-linkedin-url)
+[![GitHub](https://img.shields.io/badge/GitHub-Follow-black)](your-github-url)
 
 ---
+
+*Dataset: [IBM HR Analytics Employee Attrition](https://www.kaggle.com/datasets/pavansubhasht/ibm-hr-analytics-attrition-dataset) via Kaggle*
