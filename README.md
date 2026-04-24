@@ -28,10 +28,14 @@ This project analyzes employee attrition patterns using the **IBM HR Analytics d
 
 Built with Power BI, connected live to PostgreSQL. Use the **department slicer** to filter all visuals simultaneously.
 
-| Overview | Filtered: R&D | Salary Comparison |
-|---|---|---|
-| ![Overview](dashboard/Screenshots/dashboard_overview.png) | ![R&D](dashboard/Screenshots/dashboard_filtered_RD.png) | ![Salary](dashboard/Screenshots/salary_comparison.png) |
+<div align="center">
 
+| 🗂️ Overview | 🔬 Filtered: R&D | 💰 Salary Comparison |
+|:---:|:---:|:---:|
+| ![Overview](dashboard/Screenshots/dashboard_overview.png) | ![R&D](dashboard/Screenshots/dashboard_filtered_RD.png) | ![Salary](dashboard/Screenshots/salary_comparison.png) |
+| Full company view | R&D department drill-down | Leavers vs stayers pay gap |
+
+</div>
 ---
 
 ## 🔍 Key Findings
