@@ -151,8 +151,8 @@ psql -d hr_analytics -f sql/00_data_validation.sql
 BCA Final Year | Aspiring Data Analyst
 📍 Bengaluru / Hyderabad
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)]([https://www.linkedin.com/in/mohammed-yousuf-aiml])
-[![GitHub](https://img.shields.io/badge/GitHub-Follow-black)](your-github-url)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://www.linkedin.com/in/mohammed-yousuf-aiml)
+[![GitHub](https://img.shields.io/badge/GitHub-Follow-black)](https://github.com/MohammedYousufCode)
 
 ---
 
