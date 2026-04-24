@@ -2,7 +2,6 @@
 
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Power BI](https://img.shields.io/badge/Power%20BI-F2C811?style=for-the-badge&logo=powerbi&logoColor=black)
-![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
 
 > An end-to-end data analytics project uncovering why employees leave, who is most at risk, and what HR can do about it.
@@ -21,7 +20,6 @@ This project analyzes employee attrition patterns using the **IBM HR Analytics d
 |---|---|
 | 🐘 PostgreSQL | Data modeling + 7 advanced SQL queries |
 | 📊 Power BI Desktop | Interactive 5-visual dashboard (live PostgreSQL connection) |
-| 🐍 Python (Pandas, Seaborn) | Supporting EDA |
 | 🐙 GitHub | Version control |
 
 ---
@@ -32,7 +30,7 @@ Built with Power BI, connected live to PostgreSQL. Use the **department slicer**
 
 | Overview | Filtered: R&D | Salary Comparison |
 |---|---|---|
-| ![Overview](dashboard/screenshots/dashboard_overview.jpg) | ![R&D](dashboard/screenshots/dashboard_filtered_RD.jpg) | ![Salary](dashboard/screenshots/salary_comparison.jpg) |
+| ![Overview](dashboard/Screenshots/dashboard_overview.jpg) | ![R&D](dashboard/Screenshots/dashboard_filtered_RD.jpg) | ![Salary](dashboard/Screenshots/salary_comparison.jpg) |
 
 ---
 
