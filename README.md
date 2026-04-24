@@ -30,10 +30,14 @@ Built with Power BI, connected live to PostgreSQL. Use the **department slicer**
 
 <div align="center">
 
-| 🗂️ Overview | 🔬 Filtered: R&D | 💰 Salary Comparison |
-|:---:|:---:|:---:|
-| ![Overview](dashboard/Screenshots/dashboard_overview.png) | ![R&D](dashboard/Screenshots/dashboard_filtered_RD.png) | ![Salary](dashboard/Screenshots/salary_comparison.png) |
-| Full company view | R&D department drill-down | Leavers vs stayers pay gap |
+### 🗂️ Overview
+![Overview](dashboard/Screenshots/dashboard_overview.png)
+
+### 🔬 Filtered: R&D
+![R&D](dashboard/Screenshots/dashboard_filtered_RD.png)
+
+### 💰 Salary Comparison
+![Salary](dashboard/Screenshots/salary_comparison.png)
 
 </div>
 ---
