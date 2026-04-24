@@ -1,5 +1,10 @@
 # HR Analytics — Employee Attrition Analysis
 
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+![Power BI](https://img.shields.io/badge/Power%20BI-F2C811?style=for-the-badge&logo=powerbi&logoColor=black)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
+
 > An end-to-end data analytics project uncovering why employees leave, who is most at risk, and what HR can do about it.
 
 ---
@@ -142,11 +147,11 @@ psql -d hr_analytics -f sql/00_data_validation.sql
 
 ## 👤 Author
 
-**[Your Name]**
+**[Mohammed Yousuf]**
 BCA Final Year | Aspiring Data Analyst
 📍 Bengaluru / Hyderabad
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](your-linkedin-url)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)]([https://www.linkedin.com/in/mohammed-yousuf-aiml])
 [![GitHub](https://img.shields.io/badge/GitHub-Follow-black)](your-github-url)
 
 ---
