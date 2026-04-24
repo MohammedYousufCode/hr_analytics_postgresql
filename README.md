@@ -30,7 +30,7 @@ Built with Power BI, connected live to PostgreSQL. Use the **department slicer**
 
 | Overview | Filtered: R&D | Salary Comparison |
 |---|---|---|
-| ![Overview](dashboard/Screenshots/dashboard_overview.jpg) | ![R&D](dashboard/Screenshots/dashboard_filtered_RD.jpg) | ![Salary](dashboard/Screenshots/salary_comparison.jpg) |
+| ![Overview](dashboard/Screenshots/dashboard_overview.png) | ![R&D](dashboard/Screenshots/dashboard_filtered_RD.png) | ![Salary](dashboard/Screenshots/salary_comparison.png) |
 
 ---
 
