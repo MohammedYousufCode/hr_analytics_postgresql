@@ -163,3 +163,11 @@ BCA Final Year | Aspiring Data Analyst
 ---
 
 *Dataset: [IBM HR Analytics Employee Attrition](https://www.kaggle.com/datasets/pavansubhasht/ibm-hr-analytics-attrition-dataset) via Kaggle*
+
+---
+ 
+## 📄 License
+ 
+This project is licensed under the [MIT License](LICENSE) — © 2025 Mohammed Yousuf.
+ 
+---
